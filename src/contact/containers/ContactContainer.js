@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import { Card } from 'semantic-ui-react'
+
+import ContactComponent from '../components/ContactComponent'
 
 class ClientContainer extends Component {
   constructor(props) {
@@ -18,15 +21,14 @@ class ClientContainer extends Component {
       url:'http://localhost:3001/api/contacts',
     })
     .then((data) => {
-      console.log(data)
       this.setState({ contacts: data.data });
     }).catch(function (error) {
       console.log(error);
     });
   }
   render() {
-    const result = this.state.contacts.map(contact => <div key={contact.firstname}>{contact.firstname}, {contact.lastname}</div>)
-    return <div>{result}</div>;
+    const result = this.state.contacts.map(contact => <ContactComponent key={contact.firstname + ':' + contact.lastname} contact={contact}/>)
+    return <Card.Group>{result}</Card.Group>;
   }
 }
 

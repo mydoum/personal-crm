@@ -4,7 +4,7 @@ import { Card } from 'semantic-ui-react'
 
 import ContactComponent from '../components/ContactComponent'
 
-class ClientContainer extends Component {
+class ContactContainer extends Component {
   constructor(props) {
     super(props);
 
@@ -32,4 +32,4 @@ class ClientContainer extends Component {
   }
 }
 
-export default ClientContainer;
+export default ContactContainer;

@@ -3,7 +3,7 @@ import {Card, Icon, Image} from 'semantic-ui-react';
 
 let moment = require('moment');
 
-class ClientComponent extends Component {
+class ContactComponent extends Component {
 
   render() {
     const {firstname, lastname, email, notes} = this.props.contact;
@@ -39,4 +39,4 @@ class ClientComponent extends Component {
   }
 }
 
-export default ClientComponent;
+export default ContactComponent;

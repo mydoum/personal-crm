@@ -1,18 +1,24 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
-import MenuComponent from './layout/menu/MenuComponent'
-//import SidebarComponent from './layout/sidebar/SidebarComponent'
-import ContactContainer from './contact/containers/ContactContainer';
+import MenuComponent from './layout/menu/MenuComponent';
+import HomeComponent from './pages/home/HomeComponent';
+import CreateContactComponent from './pages/create/CreateContactComponent';
+
+import './App.css';
 
 class App extends Component {
   render() {
     return (
-        <div className="App">
-          <MenuComponent/>
-          <ContactContainer/>
-        </div>
+        <Router>
+          <div id="html">
+            <MenuComponent/>
+            <div id="body">
+              <Route exact path="/" component={HomeComponent}/>
+              <Route path="/create" component={CreateContactComponent}/>
+            </div>
+          </div>
+        </Router>
     );
   }
 }

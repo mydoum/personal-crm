@@ -1,15 +1,8 @@
 import React, {Component} from 'react';
-import {
-  Form,
-  TextArea,
-  Button,
-  Message,
-  Grid,
-  Segment,
-} from 'semantic-ui-react';
+import { Form, TextArea, Button, Message, Grid, Segment, Input, Select } from 'semantic-ui-react';
 import axios from 'axios';
 
-import './CreateContactComponent.css';
+import '../css/ContactCreateComponent.css';
 
 const options = [
   {key: 'm', text: 'Male', value: 'male'},
@@ -22,7 +15,7 @@ function JsonResponse(props) {
         <strong>JSON Response</strong>
         <pre>{JSON.stringify(props.response, null, '\t')}</pre>
       </div>
-  )
+  );
 }
 
 class CreateContactComponent extends Component {
@@ -31,8 +24,8 @@ class CreateContactComponent extends Component {
       firstname: 'a',
       lastname: 'a',
       email: '',
-      "phone-number": '',
-      notes: ''
+      'phone-number': '',
+      notes: '',
     },
     created: false,
     sent: false,
@@ -46,6 +39,10 @@ class CreateContactComponent extends Component {
     this.setState({data: data});
   };
 
+  optionHandleChange = (e, {options, name}) => {
+    console.log(options.value, name)
+  }
+
   sendContact = () => {
     this.setState({sent: true});
     axios({
@@ -57,57 +54,67 @@ class CreateContactComponent extends Component {
       console.log(data);
     }).catch((error) => {
       console.log(error);
-      this.setState({created: false, status: error.response.status, response: error.response.data});
+      this.setState({
+        created: false,
+        status: error.response.status,
+        response: error.response.data,
+      });
     });
   };
 
   checkColor = (status) => {
-    var color = 'red'
-    switch(status) {
+    var color = 'red';
+    switch (status) {
       case 200:
-        color = 'green'
+        color = 'green';
         break;
       default:
-        color = 'red'
+        color = 'red';
         break;
     }
-    return color
-  }
+    return color;
+  };
 
   render() {
     const {firstname, lastname, email, notes} = this.state.data;
     const jsonResult = (this.state.sent) ? (
         <Grid.Column>
-          <Segment color={this.checkColor(this.state.status)}>{this.state.status}</Segment>
+          <Segment color={this.checkColor(
+              this.state.status)}>{this.state.status}</Segment>
           <JsonResponse response={this.state.response}/>
         </Grid.Column>
-    ) : null
+    ) : null;
+
+    const formElements = [
+      {control: Input, label: 'First name', name: 'firstname', required: true},
+      {control: Input, label: 'Last name', name: 'lastname', required: true},
+      {control: Select, label: 'Gender', name: 'gender', options: options},
+      {control: Input, label: 'Email', name: 'email'},
+      {control: Input, label: 'Phone', name: 'phone'},
+      {control: TextArea, label: 'notes', name: 'notes', placeholder: 'Tell us more about this contact...'}
+    ].map(element => <Form.Field
+        key={element.label}
+        control={element.control}
+        label={element.label}
+        placeholder={(element.placeholder) ? element.placeholder: element.label}
+        name={element.name}
+        value={this.state.data[element.name]}
+        required={(element.required) ? element.required : false}
+        options={(element.options) ? element.options: null}
+        onChange={this.handleChange}
+    />)
+
+    let counter = 0
+    const formResult = [3, 2, 1].map(rate => {
+      const oldCounter = counter
+      counter += rate
+      return <Form.Group key={oldCounter + (oldCounter + rate)} widths='equal'>{formElements.slice(oldCounter, oldCounter + rate)}</Form.Group>
+    })
+
     return (
         <div>
           <Form>
-            <Form.Group widths='equal'>
-              <Form.Input label='First name' name="firstname" value={firstname}
-                          placeholder='First name' required
-                          onChange={this.handleChange}/>
-              <Form.Input label='Last name' name="lastname" value={lastname}
-                          placeholder='Last name' required
-                          onChange={this.handleChange}/>
-              <Form.Select label='Gender' options={options}
-                           placeholder='Gender'/>
-            </Form.Group>
-            <Form.Group widths='equal'>
-              <Form.Input label='Email' name="email" value={email}
-                          placeholder='Email'
-                          onChange={this.handleChange}/>
-
-              <Form.Input label='Phone' name="phone-number" value={this.state.data["phone-number"]}
-                          placeholder='Phone'
-                          onChange={this.handleChange}/>
-            </Form.Group>
-            <Form.Group widths='equal'>
-              <Form.Field control={TextArea} label='notes' name="notes" value={notes}
-                          placeholder='Tell us more about this contact...'/>
-            </Form.Group>
+              {formResult}
           </Form>
           <Form success={this.state.created}>
             <Message

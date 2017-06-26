@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import { Form, TextArea, Button, Message, Grid, Segment, Input, Select } from 'semantic-ui-react';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 import axios from 'axios';
 
+import 'react-datepicker/dist/react-datepicker.css';
 import '../css/ContactCreateComponent.css';
 
 const options = [
@@ -19,19 +22,29 @@ function JsonResponse(props) {
 }
 
 class CreateContactComponent extends Component {
-  state = {
-    data: {
-      firstname: 'a',
-      lastname: 'a',
-      email: '',
-      'phone-number': '',
-      notes: '',
-    },
-    created: false,
-    sent: false,
-    status: 0,
-    response: {},
-  };
+  constructor() {
+    super();
+    this.state = {
+      data: {
+        firstname: 'a',
+        lastname: 'a',
+        email: '',
+        'phone-number': '',
+        notes: '',
+        birthday: '',
+        'last-contacted': '',
+        'creation-date': ''
+      },
+      created: false,
+      sent: false,
+      status: 0,
+      response: {},
+    };
+
+    this.birthdayDateHandleChange = this.birthdayDateHandleChange.bind(this);
+    this.creationDateHandleChange = this.creationDateHandleChange.bind(this);
+    this.lastContactedDateHandleChange = this.lastContactedDateHandleChange.bind(this);
+  }
 
   handleChange = (e, {name, value}) => {
     const data = {...this.state.data};
@@ -39,8 +52,26 @@ class CreateContactComponent extends Component {
     this.setState({data: data});
   };
 
-  optionHandleChange = (e, {options, name}) => {
-    console.log(options.value, name)
+  creationDateHandleChange(date) {
+    const data = {...this.state.data};
+    data['creation-date'] = date;
+    this.setState({
+      data: data
+    });
+  }
+  lastContactedDateHandleChange(date) {
+    const data = {...this.state.data};
+    data['last-contacted'] = date;
+    this.setState({
+      data: data
+    });
+  }
+  birthdayDateHandleChange(date) {
+    const data = {...this.state.data};
+    data['birthday'] = date;
+    this.setState({
+      data: data
+    });
   }
 
   sendContact = () => {
@@ -76,7 +107,6 @@ class CreateContactComponent extends Component {
   };
 
   render() {
-    const {firstname, lastname, email, notes} = this.state.data;
     const jsonResult = (this.state.sent) ? (
         <Grid.Column>
           <Segment color={this.checkColor(
@@ -115,6 +145,62 @@ class CreateContactComponent extends Component {
         <div>
           <Form>
               {formResult}
+            <Form.Group widths="equal">
+              <Form.Field>
+                <label>Birthday</label>
+                <DatePicker
+                    selected={this.state.data.birthday}
+                    openToDate={moment("1990-01-01")}
+                    onChange={this.birthdayDateHandleChange}
+                    dateFormatCalendar="D MMMM YYYY"
+                    dateFormat="D MMMM YYYY"
+                    showYearDropdown={true}
+                    dropdownMode="select"
+                    peekNextMonth
+                    showMonthDropdown
+                    placeholderText="Birthday here..."
+                    locale="en-gb"
+                    isClearable={true}
+                    title="BOB"
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Creation Date</label>
+                <DatePicker
+                    selected={this.state.data['creation-date']}
+                    openToDate={moment("1990-01-01")}
+                    onChange={this.creationDateHandleChange}
+                    dateFormatCalendar="D MMMM YYYY"
+                    dateFormat="D MMMM YYYY"
+                    showYearDropdown={true}
+                    dropdownMode="select"
+                    peekNextMonth
+                    showMonthDropdown
+                    placeholderText="Date here..."
+                    locale="en-gb"
+                    isClearable={true}
+                    title="BOB"
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Last contacted</label>
+                <DatePicker
+                    selected={this.state.data['last-contacted']}
+                    openToDate={moment("1990-01-01")}
+                    onChange={this.lastContactedDateHandleChange}
+                    dateFormatCalendar="D MMMM YYYY"
+                    dateFormat="D MMMM YYYY"
+                    showYearDropdown={true}
+                    dropdownMode="select"
+                    peekNextMonth
+                    showMonthDropdown
+                    placeholderText="Date here..."
+                    locale="en-gb"
+                    isClearable={true}
+                    title="BOB"
+                />
+              </Form.Field>
+            </Form.Group>
           </Form>
           <Form success={this.state.created}>
             <Message

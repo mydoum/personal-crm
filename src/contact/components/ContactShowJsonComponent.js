@@ -2,17 +2,8 @@ import React from 'react';
 import {Grid, Segment} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-function checkColor(status) {
-  var color = 'red';
-  switch (status) {
-    case 200:
-      color = 'green';
-      break;
-    default:
-      color = 'red';
-      break;
-  }
-  return color;
+function getColorStatus(status) {
+  return (status === 200) ? 'green' : 'red'
 };
 
 function JsonResponse(props) {
@@ -27,7 +18,7 @@ function JsonResponse(props) {
 export default function JsonResultComponent(props) {
   return (
       <Grid.Column>
-        <Segment color={checkColor(props.status)}>
+        <Segment color={getColorStatus(props.status)}>
           {props.status}
         </Segment>
         <JsonResponse response={props.response}/>

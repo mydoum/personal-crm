@@ -1,39 +1,28 @@
 import React, {Component} from 'react';
-import { Form, TextArea, Button, Grid, Segment, Input, Select } from 'semantic-ui-react';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
+import { Form, Button, Grid } from 'semantic-ui-react';
 import axios from 'axios';
 
+import ContactObj from './ContactObject'
 import MessageSuccess from './ContactCreateSuccessMessage'
 import JsonResultComponent from './ContactShowJsonComponent'
+import ContactFormComponent from './ContactFormComponent'
 
 import 'react-datepicker/dist/react-datepicker.css';
 import '../css/ContactCreateComponent.css';
 
-const options = [
-  {key: 'm', text: 'Male', value: 'male'},
-  {key: 'f', text: 'Female', value: 'female'},
-];
 
 class CreateContactComponent extends Component {
   constructor() {
     super();
     this.state = {
-      data: {
-        firstname: 'a',
-        lastname: 'a',
-        email: '',
-        'phone-number': '',
-        notes: '',
-        birthday: null,
-        'last-contacted': null,
-        'creation-date': null
-      },
+      data: {...ContactObj},
       created: false,
       sent: false,
       status: 0,
       response: {},
     };
+
+    this.genericDateHandleChange = this.genericDateHandleChange.bind(this)
   }
 
   handleChange = (e, {name, value}) => {
@@ -58,7 +47,6 @@ class CreateContactComponent extends Component {
       data: this.state.data,
     }).then((data) => {
       this.setState({created: true, status: data.status, response: data.data});
-      console.log(data);
     }).catch((error) => {
       console.log(error);
       this.setState({
@@ -74,64 +62,10 @@ class CreateContactComponent extends Component {
         <JsonResultComponent status={this.state.status} response={this.state.response}/>
     ) : null;
 
-    const formElements = [
-      {control: Input, label: 'First name', name: 'firstname', required: true},
-      {control: Input, label: 'Last name', name: 'lastname', required: true},
-      {control: Select, label: 'Gender', name: 'gender', options: options},
-      {control: Input, label: 'Email', name: 'email'},
-      {control: Input, label: 'Phone', name: 'phone'},
-      {control: TextArea, label: 'notes', name: 'notes', placeholder: 'Tell us more about this contact...'}
-    ].map(element => <Form.Field
-        key={element.label}
-        control={element.control}
-        label={element.label}
-        placeholder={(element.placeholder) ? element.placeholder: element.label}
-        name={element.name}
-        value={this.state.data[element.name]}
-        required={(element.required) ? element.required : false}
-        options={(element.options) ? element.options: ''}
-        onChange={this.handleChange}
-    />)
-
-    let counter = 0
-    const formResult = [3, 2, 1].map(rate => {
-      const oldCounter = counter
-      counter += rate
-      return <Form.Group key={oldCounter + (oldCounter + rate)} widths='equal'>{formElements.slice(oldCounter, oldCounter + rate)}</Form.Group>
-    })
-
-    const formDates = [
-      {label: 'Birthday', onChange: this.birthdayDateHandleChange, selected: 'birthday'},
-      {label: 'Creation Date', onChange: this.creationDateHandleChange, selected: 'creation-date'},
-      {label: 'Last Contacted', onChange: this.lastContactedDateHandleChange, selected: 'last-contacted'}
-    ].map(dateElement =>
-        <Form.Field key={dateElement.label}>
-          <label>{dateElement.label}</label>
-
-          <DatePicker
-              selected={this.state.data[dateElement.selected]}
-              openToDate={moment("1990-01-01")}
-              onChange={(date) => this.genericDateHandleChange(date, dateElement.selected)}
-              dateFormatCalendar="D MMMM YYYY"
-              dateFormat="D MMMM YYYY"
-              showYearDropdown={true}
-              dropdownMode="select"
-              peekNextMonth
-              showMonthDropdown
-              placeholderText="Date here..."
-              locale="en-gb"
-              isClearable={true}
-          />
-        </Form.Field>
-    )
-
     return (
         <div>
           <Form>
-            {formResult}
-            <Form.Group widths="equal">
-              {formDates}
-            </Form.Group>
+            <ContactFormComponent data={this.state.data} onChange={this.handleChange} dateOnChange={this.genericDateHandleChange}/>
           </Form>
           <MessageSuccess success={this.state.created}/>
           <div id="formButton">

@@ -12,7 +12,6 @@ const options = [
 class ContactFormElementComponent extends Component {
 
   render() {
-    console.log(this.props.data)
     const formElements = [
       {control: Input, label: 'First name', name: 'firstname', required: true},
       {control: Input, label: 'Last name', name: 'lastname', required: true},

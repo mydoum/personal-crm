@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Form, Button, Grid } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import axios from 'axios';
 
 import ContactObj from './ContactObject'
@@ -55,33 +55,21 @@ class CreateContactComponent extends Component {
         response: error.response.data,
       });
     });
-  };
+  }
 
   render() {
-    const jsonResult = (this.state.sent) ? (
-        <JsonResultComponent status={this.state.status} response={this.state.response}/>
-    ) : null;
-
+    const {status, response, sent, data, created} = this.state
     return (
         <div>
-          <Form>
-            <ContactFormComponent data={this.state.data} onChange={this.handleChange} dateOnChange={this.genericDateHandleChange}/>
-          </Form>
-          <MessageSuccess success={this.state.created}/>
+          <ContactFormComponent data={data} onChange={this.handleChange} dateOnChange={this.genericDateHandleChange}/>
+          <MessageSuccess success={created}/>
+
           <div id="formButton">
             <Button onClick={this.sendContact}>Submit</Button>
           </div>
-          <Grid columns={2} divided>
-            <Grid.Row>
-              <Grid.Column>
-                <div id="json">
-                  <strong>JSON Request type : POST</strong>
-                  <pre>{JSON.stringify(this.state.data, null, '\t')}</pre>
-                </div>
-              </Grid.Column>
-              {jsonResult}
-            </Grid.Row>
-          </Grid>
+
+          <JsonResultComponent status={status} response={response} sent={sent} data={data}/>
+
         </div>
     );
   }

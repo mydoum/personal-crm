@@ -21,22 +21,16 @@ class CreateContactComponent extends Component {
       status: 0,
       response: {},
     };
-
-    this.genericDateHandleChange = this.genericDateHandleChange.bind(this)
   }
 
   handleChange = (e, {name, value}) => {
-    const data = {...this.state.data};
-    data[name] = value;
-    this.setState({data: data});
+    const data = {...this.state.data, [name]: value};
+    this.setState({data});
   };
 
-  genericDateHandleChange(date, label) {
-    const data = {...this.state.data};
-    data[label] = date;
-    this.setState({
-      data: data
-    });
+  genericDateHandleChange = (date, label) => {
+    const data = {...this.state.data, [label]: date};
+    this.setState({data});
   }
 
   sendContact = () => {

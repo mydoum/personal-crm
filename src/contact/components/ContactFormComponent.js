@@ -17,24 +17,28 @@ class ContactFormElementComponent extends Component {
       {control: Input, label: 'Last name', name: 'lastname', required: true},
       {control: Select, label: 'Gender', name: 'gender', options: options},
       {control: Input, label: 'Email', name: 'email'},
-      {control: Input, label: 'Phone', name: 'phone'},
+      {control: Input, label: 'Phone', name: 'phone-number'},
       {
         control: TextArea,
         label: 'notes',
         name: 'notes',
         placeholder: 'Tell us more about this contact...'
       }
-    ].map(element => <Form.Field
-        key={element.label}
-        control={element.control}
-        label={element.label}
-        placeholder={(element.placeholder) ? element.placeholder : element.label}
-        name={element.name}
-        value={this.props.data[element.name]}
-        required={(element.required) ? element.required : false}
-        options={(element.options) ? element.options : ''}
-        onChange={this.props.onChange}
-    />)
+    ].map(element => {
+      const params = {
+        key: element.label,
+        control: element.control,
+        label: element.label,
+        placeholder: element.placeholder || element.label,
+        name: element.name,
+        value: this.props.data[element.name],
+        required: element.required || false,
+        onChange: this.props.onChange
+      }
+      const fieldParams = element.options ? {...params, options: element.options} : params
+
+      return <Form.Field {...fieldParams} />;
+    })
 
     let counter = 0
     const formResult = [3, 2, 1].map(rate => {

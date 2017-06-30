@@ -19,7 +19,6 @@ class ContactContainer extends Component {
   }
 
   update = () => {
-    console.log('contactContainer updated!');
     this.componentWillMount()
   }
 

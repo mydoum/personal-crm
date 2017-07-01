@@ -6,15 +6,16 @@ function deleteContact(id) {
   return axios({
     method: 'delete',
     url: 'http://localhost:3001/api/contacts/' + id,
+  }).catch((error) => {
+    console.log(error);
   })
 }
+
 class ContactDeleteModalComponent extends Component {
   deleteEvent = (id) => {
     deleteContact(id).then(() => {
       this.props.update()
       this.props.triggerModal
-    }).catch((error) => {
-      console.log(error);
     })
   }
 

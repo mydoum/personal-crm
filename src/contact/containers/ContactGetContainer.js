@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import { Card } from 'semantic-ui-react';
 
-import ContactComponent from '../components/ContactComponent'
+import ContactDisplayComponent from '../components/ContactDisplayComponent'
 
-class ContactContainer extends Component {
+class ContactGetContainer extends Component {
   constructor(props) {
     super(props);
 
@@ -37,7 +37,7 @@ class ContactContainer extends Component {
   }
   render() {
     const result = this.state.contacts.map(contact =>
-        <ContactComponent
+        <ContactDisplayComponent
             key={contact.id}
             trigger={this.triggerModal}
             contact={contact}
@@ -46,4 +46,4 @@ class ContactContainer extends Component {
   }
 }
 
-export default ContactContainer;
+export default ContactGetContainer;

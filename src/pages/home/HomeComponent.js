@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import ContactContainer from '../../contact/containers/ContactContainer';
+import ContactGetContainer from '../../contact/containers/ContactGetContainer';
+
+import '../css/HomeComponent.css'
 
 class Home extends Component {
   render() {
     return (
-        <div>
-          <ContactContainer/>
+        <div className="home">
+          <ContactGetContainer/>
         </div>
     );
   }

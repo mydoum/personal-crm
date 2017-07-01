@@ -5,29 +5,32 @@ import '../css/ContactComponent.css'
 
 let moment = require('moment');
 
-
 class ContactCardComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      modify: false
+    };
+  }
 
   render() {
     const { firstname, lastname, email, notes, 'last-contacted': lastContacted, 'phone-numer': phoneNumber} = this.props.contact;
     const lastContactedDate = moment(lastContacted).format('d MMM YYYY');
+
     return (
         <div className="card">
           <Card>
-            <Label as='b' icon='pencil' corner='left'
-                   onClick={this.props.triggerModal}/>
-            <Label as='b' corner='right' icon='delete'
-                   onClick={this.props.triggerModal}/>
-            <Image
-                src='https://pbs.twimg.com/profile_images/3544538383/f46cd6062bad0dcedd55228af1c29ca2.jpeg'/>
+            <Label icon='pencil' corner='left' onClick={this.props.triggerModification}/>
+            <Label corner='right' icon='delete' onClick={this.props.triggerModal}/>
+            <Image src='https://pbs.twimg.com/profile_images/3544538383/f46cd6062bad0dcedd55228af1c29ca2.jpeg'/>
             <Card.Content>
               <Card.Header>
                 {lastname.toUpperCase()} {firstname}
               </Card.Header>
 
               <Card.Meta>
-                <span
-                    className='date'> Last contacted: {lastContactedDate} </span>
+                Last contacted: {lastContactedDate}
               </Card.Meta>
 
               <Card.Description>

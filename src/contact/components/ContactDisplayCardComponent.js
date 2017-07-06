@@ -15,7 +15,7 @@ class ContactCardComponent extends Component {
   }
 
   render() {
-    const { firstname, lastname, email, notes, 'last-contacted': lastContacted, 'phone-numer': phoneNumber} = this.props.contact;
+    const { firstname, lastname, email, notes, 'last-contacted': lastContacted, 'phone-number': phoneNumber} = this.props.contact;
     const lastContactedDate = moment(lastContacted).format('d MMM YYYY');
 
     return (
